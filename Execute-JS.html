@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Executor</title>
+</head>
+<body>
+
+  <h2>Execute JavaScript</h2>
+
+  <!-- Input field for JavaScript code -->
+  <textarea id="jsInput" rows="4" cols="50" placeholder="Write your JS code here"></textarea><br><br>
+
+  <!-- Button to execute the code -->
+  <button onclick="executeJS()">Run JavaScript</button>
+
+  <h3>Output:</h3>
+  <!-- Display output or errors -->
+  <textarea id="output" rows="10" cols="50" readonly></textarea><br><br>
+
+  <script>
+function executeJS() {
+const input = document.getElementById('jsInput').value.trim(); // Get the input code
+const outputField = document.getElementById('output'); // Output field
+outputField.value = ""; // Clear previous output
+
+try {
+ if (!input) {
+  // If input is empty, print LocalStorage data
+  const localStorageData = JSON.stringify(localStorage, null, 2);
+  outputField.value = `LocalStorage Data:\n${localStorageData}`;
+ } else {
+  // Otherwise, execute the JavaScript code
+  const result = eval(input);
+  outputField.value = `Result: ${result}`;
+ }
+} catch (error) {
+ // Handle errors
+ outputField.value = `Error: ${error.message}`;
+}
+}
+  </script>
+
+</body>
+</html>

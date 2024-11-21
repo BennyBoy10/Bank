@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restore LocalStorage</title>
+</head>
+<body>
+
+  <h2>Restore LocalStorage</h2>
+
+  <!-- Input field to paste the backup data -->
+  <textarea id="backupInput" rows="10" cols="50" placeholder="Paste your LocalStorage data here"></textarea><br><br>
+
+  <!-- Button to restore the LocalStorage -->
+  <button onclick="restoreLocalStorage()">Restore</button>
+
+  <h3>Status:</h3>
+  <p id="statusMessage"></p>
+
+  <script>
+// Function to restore the LocalStorage
+function restoreLocalStorage() {
+  try {
+ // Get the JSON data from the input field
+ const data = document.getElementById('backupInput').value;
+
+ // Parse the data into an object
+ const parsedData = JSON.parse(data);
+
+ // Save each key-value pair back to LocalStorage
+ Object.keys(parsedData).forEach(key => {
+   localStorage.setItem(key, parsedData[key]);
+ });
+
+ // Show success message
+ document.getElementById('statusMessage').innerText = "LocalStorage restored successfully!";
+      } catch (e) {
+ // Handle errors (e.g., invalid JSON)
+ document.getElementById('statusMessage').innerText = "Error: Invalid data!";
+ console.error("Failed to restore LocalStorage:", e);
+}
+}
+  </script>
+
+</body>
+</html>
