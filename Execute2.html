@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Executor with Search</title>
+</head>
+<body>
+
+  <h2>Execute JavaScript & Search LocalStorage</h2>
+
+  <!-- Input field for JavaScript code -->
+  <textarea id="jsInput" rows="4" cols="50" placeholder="Write your JS code here"></textarea><br><br>
+
+  <!-- Search bar -->
+  <input type="text" id="searchInput" placeholder="Search LocalStorage..." style="width: 300px;"> 
+  <button onclick="searchLocalStorage()">Search</button><br><br>
+
+  <!-- Button to execute the code -->
+  <button onclick="executeJS()">Run JavaScript</button>
+
+  <h3>Output:</h3>
+  <!-- Display output or errors -->
+  <textarea id="output" rows="10" cols="50" readonly></textarea><br><br>
+
+  <script>
+function executeJS() {
+  const input = document.getElementById('jsInput').value.trim(); // Get the input code
+  const outputField = document.getElementById('output'); // Output field
+  outputField.value = ""; // Clear previous output
+
+  try {
+    if (!input) {
+      // If input is empty, print LocalStorage data
+      const localStorageData = JSON.stringify(localStorage, null, 2);
+      outputField.value = `LocalStorage Data:\n${localStorageData}`;
+    } else {
+      // Otherwise, execute the JavaScript code
+      const result = eval(input);
+      outputField.value = `Result: ${result}`;
+    }
+  } catch (error) {
+    // Handle errors
+    outputField.value = `Error: ${error.message}`;
+  }
+}
+
+function searchLocalStorage() {
+  const searchInput = document.getElementById('searchInput').value.trim(); // Search term
+  const outputField = document.getElementById('output'); // Output field
+  outputField.value = ""; // Clear previous output
+
+  if (!searchInput) {
+    outputField.value = "Please enter a search term.";
+    return;
+  }
+
+  const localStorageData = JSON.stringify(localStorage, null, 2); // Full LocalStorage data
+  const foundIndex = localStorageData.indexOf(searchInput); // Search for the term
+
+  if (foundIndex === -1) {
+    outputField.value = `Search term "${searchInput}" not found in LocalStorage.`;
+  } else {
+    // Extract data around the found index
+    const contextStart = Math.max(0, foundIndex - 5); // Start 50 characters before
+    const contextEnd = Math.min(localStorageData.length, foundIndex + searchInput.length + 50000000000); // End 50 characters after
+    const context = localStorageData.substring(contextStart, contextEnd);
+
+    outputField.value = `Search term found at position ${foundIndex}.\n\nContext:\n${context}`;
+  }
+}
+  </script>
+
+</body>
+</html>
